@@ -1,0 +1,524 @@
+{
+   "Alameda": {
+      "3  Yes": 54.7,
+      "Median Age": 37.3,
+      "Median household income": 85743,
+      "Under 18 %": 21.2,
+      "Over 65  %": 12.8,
+      "resources %": 0.4,
+      "housing units per mile": 732.4
+   },
+   "Alpine": {
+      "3  Yes": 41.8,
+      "Median Age": 44.9,
+      "Median household income": 63438,
+      "Under 18 %": 21.4,
+      "Over 65  %": 27.5,
+      "resources %": 3.5,
+      "housing units per mile": 2
+   },
+   "Amador": {
+      "3  Yes": 35.1,
+      "Median Age": 50.6,
+      "Median household income": 60636,
+      "Under 18 %": 15.4,
+      "Over 65  %": 25.6,
+      "resources %": 2.8,
+      "housing units per mile": 25.4
+   },
+   "Butte": {
+      "3  Yes": 43.2,
+      "Median Age": 36.9,
+      "Median household income": 46516,
+      "Under 18 %": 20.2,
+      "Over 65  %": 17.3,
+      "resources %": 4,
+      "housing units per mile": 52.2
+   },
+   "Calaveras": {
+      "3  Yes": 36.7,
+      "Median Age": 51.6,
+      "Median household income": 54800,
+      "Under 18 %": 17.6,
+      "Over 65  %": 25.7,
+      "resources %": 2.9,
+      "housing units per mile": 22.5
+   },
+   "Colusa": {
+      "3  Yes": 47.1,
+      "Median Age": 34.7,
+      "Median household income": 56481,
+      "Under 18 %": 27.8,
+      "Over 65  %": 13.4,
+      "resources %": 28.2,
+      "housing units per mile": 5.9
+   },
+   "Contra Costa": {
+      "3  Yes": 51.1,
+      "Median Age": 39.2,
+      "Median household income": 88456,
+      "Under 18 %": 23.3,
+      "Over 65  %": 14.6,
+      "resources %": 0.7,
+      "housing units per mile": 492.5
+   },
+   "Del Norte": {
+      "3  Yes": 37,
+      "Median Age": 38.7,
+      "Median household income": 41287,
+      "Under 18 %": 21.2,
+      "Over 65  %": 15.9,
+      "resources %": 5.1,
+      "housing units per mile": 10.4
+   },
+   "El Dorado": {
+      "3  Yes": 37.9,
+      "Median Age": 45.5,
+      "Median household income": 74885,
+      "Under 18 %": 20.6,
+      "Over 65  %": 18.9,
+      "resources %": 1.2,
+      "housing units per mile": 41.7
+   },
+   "Fresno": {
+      "3  Yes": 53.6,
+      "Median Age": 31.8,
+      "Median household income": 48730,
+      "Under 18 %": 28.7,
+      "Over 65  %": 11.4,
+      "resources %": 9.6,
+      "housing units per mile": 45.4
+   },
+   "Glenn": {
+      "3  Yes": 40.6,
+      "Median Age": 36.8,
+      "Median household income": 46260,
+      "Under 18 %": 26.9,
+      "Over 65  %": 14.9,
+      "resources %": 23.5,
+      "housing units per mile": 7.6
+   },
+   "Humboldt": {
+      "3  Yes": 44.6,
+      "Median Age": 37.7,
+      "Median household income": 43718,
+      "Under 18 %": 19.5,
+      "Over 65  %": 16.1,
+      "resources %": 4.2,
+      "housing units per mile": 15.7
+   },
+   "Imperial": {
+      "3  Yes": 57.7,
+      "Median Age": 32.2,
+      "Median household income": 44779,
+      "Under 18 %": 28.7,
+      "Over 65  %": 12.1,
+      "resources %": 9.2,
+      "housing units per mile": 10.5
+   },
+   "Inyo": {
+      "3  Yes": 38.8,
+      "Median Age": 45.6,
+      "Median household income": 51500,
+      "Under 18 %": 20.4,
+      "Over 65  %": 21.8,
+      "resources %": 5.4,
+      "housing units per mile": 0.9
+   },
+   "Kern": {
+      "3  Yes": 46.3,
+      "Median Age": 31.3,
+      "Median household income": 50826,
+      "Under 18 %": 29.3,
+      "Over 65  %": 10.2,
+      "resources %": 16.7,
+      "housing units per mile": 28.4
+   },
+   "Kings": {
+      "3  Yes": 51.9,
+      "Median Age": 31.5,
+      "Median household income": 49742,
+      "Under 18 %": 27.4,
+      "Over 65  %": 9.5,
+      "resources %": 15.7,
+      "housing units per mile": 26.3
+   },
+   "Lake": {
+      "3  Yes": 49.7,
+      "Median Age": 45.8,
+      "Median household income": 40446,
+      "Under 18 %": 20.5,
+      "Over 65  %": 21.2,
+      "resources %": 6.7,
+      "housing units per mile": 25.9
+   },
+   "Lassen": {
+      "3  Yes": 30.3,
+      "Median Age": 36.2,
+      "Median household income": 54083,
+      "Under 18 %": 16,
+      "Over 65  %": 12.7,
+      "resources %": 7.3,
+      "housing units per mile": 2.6
+   },
+   "Los Angeles": {
+      "3  Yes": 50.3,
+      "Median Age": 36,
+      "Median household income": 61015,
+      "Under 18 %": 22.5,
+      "Over 65  %": 12.5,
+      "resources %": 0.5,
+      "housing units per mile": 805.5
+   },
+   "Madera": {
+      "3  Yes": 45.8,
+      "Median Age": 33.7,
+      "Median household income": 48210,
+      "Under 18 %": 27.7,
+      "Over 65  %": 13.1,
+      "resources %": 17.3,
+      "housing units per mile": 18.9
+   },
+   "Marin": {
+      "3  Yes": 47.5,
+      "Median Age": 46.1,
+      "Median household income": 104703,
+      "Under 18 %": 20.4,
+      "Over 65  %": 20.3,
+      "resources %": 0.6,
+      "housing units per mile": 202
+   },
+   "Mariposa": {
+      "3  Yes": 38.8,
+      "Median Age": 51.1,
+      "Median household income": 51385,
+      "Under 18 %": 16.4,
+      "Over 65  %": 26,
+      "resources %": 4.1,
+      "housing units per mile": 6.1
+   },
+   "Mendocino": {
+      "3  Yes": 47.9,
+      "Median Age": 42.4,
+      "Median household income": 46528,
+      "Under 18 %": 21.8,
+      "Over 65  %": 19.7,
+      "resources %": 6.4,
+      "housing units per mile": 10.5
+   },
+   "Merced": {
+      "3  Yes": 54.6,
+      "Median Age": 30.8,
+      "Median household income": 46338,
+      "Under 18 %": 29.9,
+      "Over 65  %": 10.7,
+      "resources %": 12.5,
+      "housing units per mile": 35.5
+   },
+   "Modoc": {
+      "3  Yes": 34.6,
+      "Median Age": 47.8,
+      "Median household income": 39296,
+      "Under 18 %": 19.5,
+      "Over 65  %": 24.6,
+      "resources %": 17,
+      "housing units per mile": 1.2
+   },
+   "Mono": {
+      "3  Yes": 48,
+      "Median Age": 38.3,
+      "Median household income": 60595,
+      "Under 18 %": 19.5,
+      "Over 65  %": 13.7,
+      "resources %": 7,
+      "housing units per mile": 3.9
+   },
+   "Monterey": {
+      "3  Yes": 53.8,
+      "Median Age": 33.9,
+      "Median household income": 63249,
+      "Under 18 %": 26.4,
+      "Over 65  %": 12.4,
+      "resources %": 17.7,
+      "housing units per mile": 39.6
+   },
+   "Napa": {
+      "3  Yes": 52.5,
+      "Median Age": 40.8,
+      "Median household income": 79637,
+      "Under 18 %": 21.5,
+      "Over 65  %": 17.4,
+      "resources %": 5.6,
+      "housing units per mile": 64.4
+   },
+   "Nevada": {
+      "3  Yes": 41.4,
+      "Median Age": 49.8,
+      "Median household income": 60610,
+      "Under 18 %": 17.6,
+      "Over 65  %": 24.4,
+      "resources %": 1.3,
+      "housing units per mile": 46.2
+   },
+   "Orange": {
+      "3  Yes": 45.7,
+      "Median Age": 37.5,
+      "Median household income": 81851,
+      "Under 18 %": 22.7,
+      "Over 65  %": 13.5,
+      "resources %": 0.5,
+      "housing units per mile": 1228.1
+   },
+   "Placer": {
+      "3  Yes": 39,
+      "Median Age": 41.6,
+      "Median household income": 80488,
+      "Under 18 %": 22.7,
+      "Over 65  %": 18.2,
+      "resources %": 0.7,
+      "housing units per mile": 76.4
+   },
+   "Plumas": {
+      "3  Yes": 34,
+      "Median Age": 52.1,
+      "Median household income": 50266,
+      "Under 18 %": 16.4,
+      "Over 65  %": 25.8,
+      "resources %": 7.8,
+      "housing units per mile": 5.2
+   },
+   "Riverside": {
+      "3  Yes": 48.3,
+      "Median Age": 35,
+      "Median household income": 60807,
+      "Under 18 %": 26.1,
+      "Over 65  %": 13.5,
+      "resources %": 1.5,
+      "housing units per mile": 81.1
+   },
+   "Sacramento": {
+      "3  Yes": 46.9,
+      "Median Age": 35.9,
+      "Median household income": 60239,
+      "Under 18 %": 24.2,
+      "Over 65  %": 13,
+      "resources %": 0.8,
+      "housing units per mile": 491.7
+   },
+   "San Benito": {
+      "3  Yes": 51,
+      "Median Age": 35.4,
+      "Median household income": 80760,
+      "Under 18 %": 26.6,
+      "Over 65  %": 11.7,
+      "resources %": 6.6,
+      "housing units per mile": 11.9
+   },
+   "San Bernardino": {
+      "3  Yes": 46.9,
+      "Median Age": 32.9,
+      "Median household income": 57156,
+      "Under 18 %": 27,
+      "Over 65  %": 10.6,
+      "resources %": 0.7,
+      "housing units per mile": 30
+   },
+   "San Diego": {
+      "3  Yes": 49,
+      "Median Age": 35.4,
+      "Median household income": 70588,
+      "Under 18 %": 22.2,
+      "Over 65  %": 12.9,
+      "resources %": 0.9,
+      "housing units per mile": 247.7
+   },
+   "San Francisco": {
+      "3  Yes": 60,
+      "Median Age": 38.3,
+      "Median household income": 96265,
+      "Under 18 %": 13.4,
+      "Over 65  %": 14.9,
+      "resources %": 0.2,
+      "housing units per mile": 7421.2
+   },
+   "San Joaquin": {
+      "3  Yes": 48.1,
+      "Median Age": 33.9,
+      "Median household income": 57813,
+      "Under 18 %": 27.7,
+      "Over 65  %": 12,
+      "resources %": 4.7,
+      "housing units per mile": 135.2
+   },
+   "San Luis Obispo": {
+      "3  Yes": 44.8,
+      "Median Age": 39,
+      "Median household income": 67175,
+      "Under 18 %": 18.1,
+      "Over 65  %": 18.1,
+      "resources %": 3.5,
+      "housing units per mile": 31
+   },
+   "San Mateo": {
+      "3  Yes": 54,
+      "Median Age": 39.6,
+      "Median household income": 105667,
+      "Under 18 %": 21.3,
+      "Over 65  %": 15.1,
+      "resources %": 0.5,
+      "housing units per mile": 580.3
+   },
+   "Santa Barbara": {
+      "3  Yes": 46.1,
+      "Median Age": 33.7,
+      "Median household income": 68023,
+      "Under 18 %": 22.4,
+      "Over 65  %": 14.3,
+      "resources %": 8.7,
+      "housing units per mile": 52.2
+   },
+   "Santa Clara": {
+      "3  Yes": 53,
+      "Median Age": 37,
+      "Median household income": 106761,
+      "Under 18 %": 22.8,
+      "Over 65  %": 12.6,
+      "resources %": 0.6,
+      "housing units per mile": 448.9
+   },
+   "Santa Cruz": {
+      "3  Yes": 54.1,
+      "Median Age": 37.3,
+      "Median household income": 73663,
+      "Under 18 %": 19.9,
+      "Over 65  %": 14.2,
+      "resources %": 5.1,
+      "housing units per mile": 222.1
+   },
+   "Shasta": {
+      "3  Yes": 33.2,
+      "Median Age": 41.8,
+      "Median household income": 47258,
+      "Under 18 %": 21.7,
+      "Over 65  %": 19.4,
+      "resources %": 2.2,
+      "housing units per mile": 18.2
+   },
+   "Sierra": {
+      "3  Yes": 34.7,
+      "Median Age": 55,
+      "Median household income": 44190,
+      "Under 18 %": 14.8,
+      "Over 65  %": 26.4,
+      "resources %": 4.6,
+      "housing units per mile": 2.3
+   },
+   "Siskiyou": {
+      "3  Yes": 34,
+      "Median Age": 47.9,
+      "Median household income": 40884,
+      "Under 18 %": 20.3,
+      "Over 65  %": 23.4,
+      "resources %": 10.7,
+      "housing units per mile": 3.5
+   },
+   "Solano": {
+      "3  Yes": 49.3,
+      "Median Age": 37.7,
+      "Median household income": 72950,
+      "Under 18 %": 22.7,
+      "Over 65  %": 14.2,
+      "resources %": 1.5,
+      "housing units per mile": 162.2
+   },
+   "Sonoma": {
+      "3  Yes": 53.7,
+      "Median Age": 41.4,
+      "Median household income": 71769,
+      "Under 18 %": 20.4,
+      "Over 65  %": 17.4,
+      "resources %": 2.9,
+      "housing units per mile": 116.2
+   },
+   "Stanislaus": {
+      "3  Yes": 47.7,
+      "Median Age": 33.9,
+      "Median household income": 54260,
+      "Under 18 %": 27.3,
+      "Over 65  %": 12.3,
+      "resources %": 5.5,
+      "housing units per mile": 101
+   },
+   "Sutter": {
+      "3  Yes": 43.4,
+      "Median Age": 35.7,
+      "Median household income": 54347,
+      "Under 18 %": 26.3,
+      "Over 65  %": 14.6,
+      "resources %": 10.1,
+      "housing units per mile": 47
+   },
+   "Tehama": {
+      "3  Yes": 34.4,
+      "Median Age": 41.1,
+      "Median household income": 42512,
+      "Under 18 %": 23.9,
+      "Over 65  %": 18.5,
+      "resources %": 5.4,
+      "housing units per mile": 8
+   },
+   "Trinity": {
+      "3  Yes": 29.9,
+      "Median Age": 51.4,
+      "Median household income": 36563,
+      "Under 18 %": 16.6,
+      "Over 65  %": 25.5,
+      "resources %": 4.8,
+      "housing units per mile": 2.5
+   },
+   "Tulare": {
+      "3  Yes": 52.9,
+      "Median Age": 30.6,
+      "Median household income": 44871,
+      "Under 18 %": 31.4,
+      "Over 65  %": 10.7,
+      "resources %": 18.6,
+      "housing units per mile": 24.8
+   },
+   "Tuolumne": {
+      "3  Yes": 38.9,
+      "Median Age": 48.6,
+      "Median household income": 54325,
+      "Under 18 %": 16.8,
+      "Over 65  %": 24.1,
+      "resources %": 3,
+      "housing units per mile": 12.7
+   },
+   "Ventura": {
+      "3  Yes": 48.1,
+      "Median Age": 37.5,
+      "Median household income": 81972,
+      "Under 18 %": 23.9,
+      "Over 65  %": 14.1,
+      "resources %": 5.8,
+      "housing units per mile": 136.4
+   },
+   "Yolo": {
+      "3  Yes": 51.9,
+      "Median Age": 30.9,
+      "Median household income": 61621,
+      "Under 18 %": 21.5,
+      "Over 65  %": 11.5,
+      "resources %": 4.5,
+      "housing units per mile": 60.8
+   },
+   "Yuba": {
+      "3  Yes": 41.7,
+      "Median Age": 32.4,
+      "Median household income": 51776,
+      "Under 18 %": 27.7,
+      "Over 65  %": 11.6,
+      "resources %": 4.4,
+      "housing units per mile": 35.9
+   }
+}

@@ -1,0 +1,177 @@
+<html>
+
+<head>
+<meta http-equiv=Content-Type content="text/html; charset=windows-1252">
+<meta name=Generator content="Microsoft Word 15 (filtered)">
+<style>
+<!--
+ /* Font Definitions */
+ @font-face
+	{font-family:"Cambria Math";
+	panose-1:2 4 5 3 5 4 6 3 2 4;}
+@font-face
+	{font-family:Calibri;
+	panose-1:2 15 5 2 2 2 4 3 2 4;}
+ /* Style Definitions */
+ p.MsoNormal, li.MsoNormal, div.MsoNormal
+	{margin-top:0in;
+	margin-right:0in;
+	margin-bottom:8.0pt;
+	margin-left:0in;
+	line-height:107%;
+	font-size:11.0pt;
+	font-family:"Calibri",sans-serif;}
+a:link, span.MsoHyperlink
+	{color:#0563C1;
+	text-decoration:underline;}
+a:visited, span.MsoHyperlinkFollowed
+	{color:#954F72;
+	text-decoration:underline;}
+p.Default, li.Default, div.Default
+	{mso-style-name:Default;
+	margin:0in;
+	margin-bottom:.0001pt;
+	text-autospace:none;
+	font-size:12.0pt;
+	font-family:"Times New Roman",serif;
+	color:black;}
+.MsoChpDefault
+	{font-family:"Calibri",sans-serif;}
+.MsoPapDefault
+	{margin-bottom:8.0pt;
+	line-height:107%;}
+@page WordSection1
+	{size:8.5in 11.0in;
+	margin:1.0in 1.0in 1.0in 1.0in;}
+div.WordSection1
+	{page:WordSection1;}
+-->
+</style>
+
+</head>
+
+<body lang=EN-US link="#0563C1" vlink="#954F72">
+
+<div class=WordSection1>
+
+<p class=MsoNormal>Mikhail Kouzminov</p>
+
+<p class=MsoNormal>CMPS 161 Fall 2013 Final Project</p>
+
+<p class=MsoNormal align=center style='text-align:center'>Project 1 Extension: <span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>Implementing
+streaklines to show wind space traveled</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'><img
+width=435 height=241 id="Picture 1" src="thumb.jpg"></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><img width=511
+height=304 id="Picture 8" src="index_files/image002.png"></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>Source
+Code: <a href="finalprogsource.html">finalprogsource.html</a></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>Technical
+Document: <a href="Final%20Project%20Technical%20Document.pdf">Final Project
+Technical Document.pdf</a></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>New
+data set ( wind taken over multiple hours from multiple stations):<a
+href="stations.json">stations.json</a></span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>&nbsp;</span></p>
+
+<p class=MsoNormal align=center style='text-align:center'><span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'>Code
+Structure:</span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%;font-family:
+"Times New Roman",serif'>D3 was used to create visualization.</span></p>
+
+<p class=MsoNormal>Program is arranged by “mode” of display, with code for
+implementing streaklines going from line 360 to 454.</p>
+
+<p class=MsoNormal>Improvements from project 1: Implemented display of data
+from multiple hours of time. Implemented display of streaklines.</p>
+
+<p class=MsoNormal align=center style='text-align:center'>User Guide:</p>
+
+<p class=MsoNormal>Use bar on right side of screen to determine time period for
+which data is displayed. Use mode button to change display from stations, to
+velocity glyphs, to streamlines, to pathlines.</p>
+
+<p class=MsoNormal align=center style='text-align:center'>Reference Materials:</p>
+
+<p class=MsoNormal>Website explaining types of visualization:<span
+style='font-size:12.0pt;line-height:107%;font-family:"Times New Roman",serif'> <a
+href="https://www3.nd.edu/~cwang11/2dflowvis.html">https://www3.nd.edu/~cwang11/2dflowvis.html</a></span></p>
+
+<p class=MsoNormal><span style='font-size:12.0pt;line-height:107%;font-family:
+"Times New Roman",serif'>Wikipedia article on Streaklines: <a
+href="https://en.wikipedia.org/wiki/Streamlines,_streaklines,_and_pathlines">https://en.wikipedia.org/wiki/Streamlines,_streaklines,_and_pathlines</a></span></p>
+
+<p class=MsoNormal>Calculator used in calculating distance between sides of map
+in miles for implementing streaklines: <a
+href="http://boulter.com/gps/distance/">http://boulter.com/gps/distance/</a></p>
+
+<p class=MsoNormal>Discussion of proper way to do this ( not used in final
+version): <a
+href="https://gis.stackexchange.com/questions/142326/calculating-longitude-length-in-miles">https://gis.stackexchange.com/questions/142326/calculating-longitude-length-in-miles</a></p>
+
+<p class=MsoNormal>Wind data taken from: <a
+href="https://www.windfinder.com/#10/37.2680/-121.6296">https://www.windfinder.com/#10/37.2680/-121.6296</a></p>
+
+<p class=Default style='line-height:200%'>Other sources used for copying bits
+of code:<span style='font-size:10.0pt;line-height:200%'> </span></p>
+
+<p class=Default style='line-height:200%'>Main Source (from which I took most
+of my starting code, including the map/tiles system: <a
+href="http://bl.ocks.org/mbostock/eb0c48375fcdcdc00c54a92724733d0d">http://bl.ocks.org/mbostock/eb0c48375fcdcdc00c54a92724733d0d</a></p>
+
+<p class=Default style='line-height:200%'> Tutorials for markers (Borrowed a
+decent amount of code for making arrows): </p>
+
+<p class=Default style='line-height:200%'><a
+href="http://tutorials.jenkov.com/svg/marker-element.html">http://tutorials.jenkov.com/svg/marker-element.html</a></p>
+
+<p class=Default style='line-height:200%'> <a
+href="http://bl.ocks.org/dustinlarimer/5888271">http://bl.ocks.org/dustinlarimer/5888271</a>
+</p>
+
+<p class=Default style='line-height:200%'>Wikipedia article on Shepard’s
+Interpolation: </p>
+
+<p class=Default style='line-height:200%'><a
+href="https://en.wikipedia.org/wiki/Inverse_distance_weighting">https://en.wikipedia.org/wiki/Inverse_distance_weighting</a></p>
+
+<p class=Default style='line-height:200%'>Wikipedia article on RK4/ Euler
+methods: </p>
+
+<p class=MsoNormal style='line-height:200%'><span style='font-size:12.0pt;
+line-height:200%;font-family:"Times New Roman",serif'><a
+href="https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods">https://en.wikipedia.org/wiki/Runge%E2%80%93Kutta_methods</a></span></p>
+
+<p class=MsoNormal>&nbsp;</p>
+
+</div>
+
+</body>
+
+</html>

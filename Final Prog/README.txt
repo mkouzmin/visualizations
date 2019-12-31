@@ -1,0 +1,1 @@
+Project is created in Javascript using D3. Requires to be run on Firefox to properly load data set.

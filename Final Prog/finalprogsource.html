@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+svg,
+#tiles {
+  position: absolute;
+  width: 960px;
+  height: 600px;
+  overflow: hidden;
+}
+#buttons{
+	position: relative;
+	top: 300px;
+	left: 1000px;
+}
+#slidecontainer{
+	position: relative;
+	top: 350px;
+	left: 1000px;
+}
+
+
+</style>
+<div id="tiles"></div>
+<svg width="960" height="600"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-tile.v0.0.min.js"></script>
+<script src="https://d3js.org/topojson.v1.min.js"></script>
+<script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<div id  = "buttons">
+	<button type="button" id = "heat">Switch Intensity Map</button>
+	<button type="button" id = "markerMode">Switch Mode</button>
+</div>
+
+<div id="slidecontainer">
+  <input type="range" min="0" max="12" value="0" class="slider" id="myRange">
+  <label>Time: <span id="demo" display=inline float=left></span></label>
+</div>
+<script>
+
+//load station data from json file
+d3.json("stations.json", function(response) {
+
+	var data = d3.values(response);
+	
+	var stationcount = data.length;
+	//number of squares
+	var xcount = 100;
+	var ycount = 100;
+	var hours  = 13;// number if hours for which data is defined (from 0 to hours-1)
+
+
+	var pi = Math.PI,
+		tau = 2 * pi;
+
+	var svg = d3.select("svg"),
+		width = +svg.attr("width"),
+		height = +svg.attr("height");
+		
+	//define arrow pointer marker
+	var defs = svg.append("defs");
+	defs.append("svg:marker")
+		.attr("id", "arrow")
+		.attr("viewBox", "0 0 10 10")
+		.attr("refX", "8")
+		.attr("refY", "4")
+		.attr("markerUnits", "strokeWidth")
+		.attr("markerWidth", "10")
+		.attr("markerHeight", "5")
+		.attr("orient", "auto")
+		.append("svg:path")
+		.attr("d", "M 0 0 L 10 4 L 0 8 z")
+		.attr("fill", "#000")
+		.attr('fill-opacity', "0.5");
+		
+	defs.append("svg:marker")
+		.attr("id", "clearArrow")
+		.attr("viewBox", "0 0 10 10")
+		.attr("refX", "8")
+		.attr("refY", "4")
+		.attr("markerUnits", "strokeWidth")
+		.attr("markerWidth", "10")
+		.attr("markerHeight", "5")
+		.attr("orient", "auto")
+		.append("svg:path")
+		.attr("d", "M 0 0 L 10 4 L 0 8 z")
+		.attr("fill", "#000")
+		.attr('fill-opacity', "0.2");
+
+
+	// Initialize the projection to fit the world in a 1×1 square centered at the origin.
+	var projection = d3.geoMercator()
+		.scale(1 / tau)
+		.translate([0, 0]);
+
+	// Compute the projected bounding box given a geographic bounding box (here, California).
+	// This assumes parallels are horizontal and meridians are vertical…
+	// but you could use path.bounds to handle arbitrary shapes.
+	// Note that the y-dimension is flipped relative to latitude!
+	var bounds = [[-121.41, 36.94], [-122.49, 37.56]],
+		p0 = projection([bounds[0][0], bounds[1][1]]),
+		p1 = projection([bounds[1][0], bounds[0][1]]);
+
+	// Convert this to a scale k and translate tx, ty for the projection.
+	// For crisp image tiles, clamp to the nearest power of two.
+	var k = floor(0.95 / Math.max((p1[0] - p0[0]) / width, (p1[1] - p0[1]) / height)),
+		tx = (width - k * (p1[0] + p0[0])) / 2,
+		ty = (height - k * (p1[1] + p0[1])) / 2;
+
+	projection
+		.scale(k / tau)
+		.translate([tx, ty]);
+		
+	
+
+	
+
+
+
+	// Lastly convert this to the corresponding tile.scale and tile.translate;
+	// see http://bl.ocks.org/mbostock/4150951 for a related example.
+	var tiles = d3.tile()
+		.size([width, height])
+		.scale(k)
+		.translate([tx, ty])
+		();
+
+	d3.select("#tiles")
+	  .selectAll("img").data(tiles).enter().append("img")
+		.style("position", "absolute")
+		.attr("src", function(d, i) { return "http://" + "abc"[d[1] % 3] + ".tile.openstreetmap.org/" + d[2] + "/" + d[0] + "/" + d[1] + ".png"; })
+		.style("left", function(d) { return (d[0] + tiles.translate[0]) * tiles.scale + "px"; })
+		.style("top", function(d) { return (d[1] + tiles.translate[1]) * tiles.scale + "px"; })
+		.attr("width", tiles.scale)
+		.attr("height", tiles.scale);
+
+	//original functions
+
+	
+	//create Array of coordinates of all sample grid squares 
+	var samplecoords = new Array(xcount * ycount);
+	for (i = 0; i < xcount; i++){
+		for(j = 0; j < ycount; j++){
+			samplecoords[(j*xcount) + i] = projection.invert([i*(960/xcount), j * (600/ycount)]);
+		}
+	}
+	
+	//console.log(samplecoords);
+	//create array of values of Shepard interpolation in all heatmap sample grid squares
+	var sampleShepard = new Array(hours);
+	for (i = 0; i < hours; i++){
+		sampleShepard[i] = new Array(xcount * ycount);
+	}
+	var power = 2;
+	var numerx, numery, denomx, denomy, angle_s, mag_s, loc_s, loc_ij, w_ijs;
+	for (h = 0; h < hours; h ++){
+		for(i = 0; i < xcount; i++){
+			for(j = 0; j < ycount; j++){
+				numerx = 0;
+				denom = 0;
+				numery = 0;
+				loc_ij = samplecoords[i*xcount + j]
+				for(s = 0; s < stationcount; s++){
+					angle_s = data[s][h.toString()][0]* (2*(Math.PI)/360);
+					mag_s = data[s][h.toString()][1];
+					loc_s = [data[s]["Location"][0],data[s]["Location"][1]];
+					w_ijs = Math.pow(d3.geoDistance(loc_ij, loc_s),power)
+					numerx = numerx - Math.sin(angle_s) * mag_s / w_ijs;
+					numery = numery + Math.cos(angle_s) * mag_s / w_ijs;
+					denom = denom + 1/w_ijs;
+				}
+				sampleShepard[h][i*xcount + j] = [numerx/denom, numery/denom]; //store values as x,y components of Shepard vectors
+			}
+		}
+	}
+	console.log(sampleShepard);
+			
+	
+	//max_vel = maximum velocity of wind to interpolate by - maybe change to depend on actual json data instead of rough estimate
+	var max_vel = 7;
+	var curr_time = 0;
+	
+	//var max_vel = Math.sin(178) * 11
+	var cells = svg.selectAll('heat')
+		.data(sampleShepard[curr_time])
+		.enter().append('g').append('rect')
+		.attr('class','cell')
+		.attr('width', 960/xcount)
+		.attr('height', 600/ycount)
+		.attr('y', function(d, i) {return Math.floor(i/xcount) * (600/ycount);})
+		.attr('x', function(d, i) {return i%xcount * (960/xcount);})
+		.attr('fill', function(d) {return d3.interpolateRdYlBu(1-( Math.sqrt(Math.pow(d[0],2)+Math.pow(d[1],2))/max_vel));})
+		//for testing purposes - show x and y component independently
+		//.attr('fill', function(d) {return d3.interpolateRdYlBu(1-(d[0])/max_vel);})
+		//.attr('fill', function(d) {return d3.interpolateRdYlBu(1-(d[1])/max_vel);})
+		.attr('fill-opacity', "0.0");
+
+
+
+	//use to display station markers   
+	var stations = svg.selectAll('stations')
+		.data(data)
+		.enter().append('g').append('circle')
+		.attr("r", function(d){ return (2+d[curr_time.toString()][1]) * 2;})
+		.attr("cx", function(d){ return projection([d["Location"][0],d["Location"][1]])[0];})
+		.attr("cy",function(d){return projection([d["Location"][0],d["Location"][1]])[1];})
+		.attr("fill", function(d) {return d3.interpolateRdYlBu(1-(d[curr_time.toString()][1]/max_vel));})
+		//test with independent x and y
+		//.attr("fill", function(d) {return d3.interpolateRdYlBu(1-((Math.sin(d[2])*d[3])/max_vel));})
+		//.attr("fill", function(d) {return d3.interpolateRdYlBu(1-((-1*(Math.cos(d[2])*d[3]))/max_vel));})
+		.attr("stroke", "black")
+		.attr("stroke-opacity", "1.0")
+		.attr('fill-opacity', "0.6");
+
+	//use to display station arrows
+	var stationarrs = svg.selectAll('stationArrows')
+		.data(data)
+		.enter().append('g').append('path')
+		.attr('d', function(d,i){return 'M ' + projection([d["Location"][0],d["Location"][1]])[0] + ', ' +
+								projection([d["Location"][0],d["Location"][1]])[1] + 'l ' +
+								((-1)*Math.sin(d[curr_time.toString()][0]*(2*Math.PI/360))*((d[curr_time.toString()][1])*2)) + ', '
+								+ (Math.cos(d[curr_time.toString()][0]*(2*Math.PI/360))*((d[curr_time.toString()][1])* 2)) + '';})//2 + d[3] changes minimum arrow size, but x vs y stays constant
+		.attr("marker-end", "url(#arrow)")
+		.attr("stroke", "#000")
+		.attr('stroke-opacity', "0")
+		.attr("stroke-width", function(d) {return (2+d[curr_time.toString()][1])* (3/5);});
+		
+	//record values for shepard arrows to display
+	var numpointsx = 10;//has to be divisor of xcount
+	var numpointsy = 5;
+	var minisampleShepard = new Array(hours);
+	for(i = 0; i < hours; i++){
+		minisampleShepard[i] = new Array(numpointsx * numpointsy);//holds velocity data of n *n points
+	}
+	for(h =0; h< hours; h++){
+		for(i = 0; i < numpointsx; i++){
+			for(j = 0; j < numpointsy;j++){
+				var value = sampleShepard[h][(j*(ycount/numpointsy) * xcount) + (i*(xcount/numpointsx))];
+				minisampleShepard[h][j * numpointsx + i] = value;//Math.sqrt(Math.pow(value[0],2)+Math.pow(value[1],2));
+			}
+		}
+	}
+	//console.log(minisampleShepard);
+	//console.log(minisampleShepard[0]);
+	
+	//markers for arrow plot velocity grid made here
+	var gridv = svg.selectAll('gridpoints')
+		.data(minisampleShepard[curr_time])
+		.enter().append('g').append('circle')
+		.attr("r", function(d){return (2+Math.sqrt(Math.pow(d[0],2)+Math.pow(d[1],2))) * 2;})
+		.attr("cx", function(d, i){ return i%numpointsx * (960/numpointsx);})
+		.attr("cy",function(d, i){return Math.floor(i/numpointsx) * (600/numpointsy);})
+		.attr("fill", function(d) {return d3.interpolateRdYlBu(1-((Math.sqrt(Math.pow(d[0],2)+Math.pow(d[1],2)))/max_vel));})
+		//.attr("fill", function(d) {return d3.interpolateRdYlBu(1-((Math.sin(d[2])*d[3])/max_vel));})
+		//.attr("fill", function(d) {return d3.interpolateRdYlBu(1-((-1*(Math.cos(d[2])*d[3]))/max_vel));})
+		.attr("stroke", "black")
+		.attr("stroke-opacity", "0.0")
+		.attr('fill-opacity', "0.0");
+		
+	//arrows for arrow plot velocity grid made here
+	var gridarrs = svg.selectAll('gridArrows')
+		.data(minisampleShepard[curr_time])
+		.enter().append('g').append('path')
+		.attr('d', function(d,i){return 'M ' + (i%numpointsx * (960/numpointsx)) + ', ' + (Math.floor(i/numpointsx) * (600/numpointsy)) + ' l ' + (d[0] * 2)  + ', ' + (d[1] * 2) + '';})
+		.attr("marker-end", "")
+		.attr("stroke", "#000")
+		.attr('stroke-opacity', "0")
+		.attr("stroke-width", function(d) {return (2+Math.sqrt(Math.pow(d[0],2)+Math.pow(d[1],2)))* (3/5);});
+
+
+
+
+	// find array of steps for streams
+	var fwdstreamcoords = new Array(hours-1);
+	for (i = 0; i < hours; i++){
+		fwdstreamcoords[i] =  new Array(numpointsx*numpointsy);
+	}
+	var bckstreamcoords = new Array(hours-1);
+	for (i = 0; i < hours; i++){
+		bckstreamcoords[i] =  new Array(numpointsx*numpointsy);
+	}
+	var t = 0.5;
+	var steps = 20;//number of steps one way
+	var s, curr_pos, path, curr_pos_val;
+	//fill forward stream coords
+	for(h = 0; h < hours; h ++){
+		for(i = 0; i < numpointsx; i++){
+			for(j = 0; j < numpointsy;j++){
+				curr_pos = [i * (960/numpointsx),j * (600/numpointsy)];
+				path = 'M ' + curr_pos[0] + ', ' + curr_pos[1] + '';
+				for (s = 0; s < steps; s++){
+					var curr_Shep_i = Math.floor(curr_pos[0]/(960/xcount));//value of i and j in Shepard Matrix
+					var curr_Shep_j = Math.floor(curr_pos[1]/(600/ycount));
+					if(curr_Shep_j<0 || curr_Shep_j >= ycount || curr_Shep_i<0 || curr_Shep_i>=xcount){//only record arrows in range
+						//console.log(Math.floor(curr_pos[1]/(600/ycount)));
+						//console.log(Math.floor(curr_pos[0]/(960/xcount)));
+						break;
+					}
+					//console.log(sampleShepard[0]);
+					curr_pos_val = sampleShepard[h][(curr_Shep_j* ycount) + Math.floor(curr_Shep_i)];//gives x-y values in mph x vs mph y
+					curr_pos = [curr_pos[0] + (curr_pos_val[0]*t), curr_pos[1] + (curr_pos_val[1]*t)];// do one step forwards
+					path  = path + "L " + curr_pos[0] +", " + curr_pos[1] + "";
+				}
+				fwdstreamcoords[h][j * numpointsx + i] = path;
+			}
+		}
+	}
+	
+	//fill backwards stream coords
+	for(h = 0; h < hours; h ++){
+		for(i = 0; i < numpointsx; i++){
+			for(j = 0; j < numpointsy;j++){
+				curr_pos = [i * (960/numpointsx),j * (600/numpointsy)];
+				path = 'M ' + curr_pos[0] + ', ' + curr_pos[1] + '';
+				for (s = 0; s < steps; s++){
+					var curr_Shep_i = Math.floor(curr_pos[0]/(960/xcount));//value of i and j in Shepard Matrix
+					var curr_Shep_j = Math.floor(curr_pos[1]/(600/ycount));
+					if(curr_Shep_j<0 || curr_Shep_j >= ycount || curr_Shep_i<0 || curr_Shep_i>=xcount){//only record arrows in range
+						//console.log(Math.floor(curr_pos[1]/(600/ycount)));
+						//console.log(Math.floor(curr_pos[0]/(960/xcount)));
+						break;
+					}
+					curr_pos_val = sampleShepard[h][(curr_Shep_j* ycount) + Math.floor(curr_Shep_i)]; //get previously calculated velocities, do not interpolate for new ones.(could interpolate for values inside each (heatmap) square, but squares are small enough to not matter.
+					curr_pos = [curr_pos[0] - (curr_pos_val[0]*t), curr_pos[1] - (curr_pos_val[1]*t)];//do one step backwards
+					path  = path + "L " + curr_pos[0] +", " + curr_pos[1] + "";
+				}
+				bckstreamcoords[h][j * numpointsx + i] = path;
+			}
+		}
+	}
+	
+	//markers for forward streamlines
+	var streamfwd = svg.selectAll('forwardStreams')
+		.data(fwdstreamcoords[curr_time])
+		.enter().append('g').append('path')
+		.attr('d', function(d,i){return d;})
+		.attr("marker-end", "")
+		.attr("stroke", "#000")
+		.attr('stroke-opacity', "0")
+		.attr('fill-opacity', "0")
+		.attr("stroke-width", "3");
+		
+		//markers for backwards streamlines
+	var streambck = svg.selectAll('backwardStreams')
+		.data(bckstreamcoords[curr_time])
+		.enter().append('g').append('path')
+		.attr('d', function(d,i){return d;})
+		.attr("stroke", "#000")
+		.attr('stroke-opacity', "0")
+		.attr('fill-opacity', "0")
+		.attr("stroke-width", "3");
+	
+//event listeners - for button pushes
+
+	//console.log(Math.cos(-121.41 * 2*(Math.PI)/360)-Math.cos(-122.49 * 2*(Math.PI)/360));
+	var mLat = 22.7;// screen is 22.7 miles high ( estimate, average of 22.35 and 23.04 on sides of screen
+	var mLong = 74.63;// screen is 74.63 miles long
+	var mToPixLong = 960/mLong;
+	var mToPixLat = 600/mLat; 
+	
+	var streakcoords = new Array(numpointsx*numpointsy); // fill out array for pathlines and streaklines. k is start time of pathline. last index is number of hours passed since pathline started
+	var streakPaths = new Array(hours);
+	
+	
+	for (i = 0; i < numpointsx; i++){
+		for(j = 0; j < numpointsy; j ++){
+			streakcoords[j* numpointsx + i] = new Array(hours);
+			for( k = 0; k < hours; k ++){
+				streakcoords[j * numpointsx + i][k] = new Array(hours-k);
+			}
+		}
+	}
+	
+	for (h = 0; h < hours; h ++){
+		streakPaths[h] = new Array(numpointsx*numpointsy);
+		for(i = 0; i < numpointsx; i++){
+			for(j = 0; j < numpointsy;j++){
+			streakPaths[h][j * numpointsx + i] = '';
+			}
+		}
+	}
+	
+	var t = 0.2;
+	var steps = hours/t;//number of steps one way
+	var sph = 1/t; // number of steps per hour
+	var s, curr_pos, path, curr_pos_val;
+	//fill forward stream coords
+	for (start_time = 0; start_time < hours; start_time ++){// fill out table for all hours - make one pathline per hour, with steps in between.
+		for(i = 0; i < numpointsx; i++){
+			for(j = 0; j < numpointsy;j++){
+				curr_pos = [i * (960/numpointsx),j * (600/numpointsy)];
+				var coordnum = 0;
+				path = 'M ' + curr_pos[0] + ', ' + curr_pos[1] + '';
+				for(h = start_time; h < hours; h++){//show pathlines of length from now until end of recorded time
+					var outofbounds = 0;
+					for(s = 0 ; s < sph; s++){
+						var curr_Shep_i = Math.floor(curr_pos[0]/(960/xcount));//value of i and j in Shepard Matrix
+						var curr_Shep_j = Math.floor(curr_pos[1]/(600/ycount));
+						if(curr_Shep_j<0 || curr_Shep_j >= ycount || curr_Shep_i<0 || curr_Shep_i>=xcount){//only record arrows in range
+							//console.log(Math.floor(curr_pos[1]/(600/ycount)));
+							//console.log(Math.floor(curr_pos[0]/(960/xcount)));
+							outofbounds = 1;
+							break;
+						}
+						//console.log(sampleShepard[0]);
+						curr_pos_val = sampleShepard[h][(curr_Shep_j* ycount) + Math.floor(curr_Shep_i)];//gives x-y values in mph x vs mph y
+						curr_pos = [curr_pos[0] + (curr_pos_val[0]*t * mToPixLong), curr_pos[1] + (curr_pos_val[1]*t * mToPixLat)];// do one step forwards, adding 
+						path  = path + "L " + curr_pos[0] +", " + curr_pos[1] + "";
+					}
+					if (outofbounds === 1){
+						outofbounds = 0;
+						break;
+					}
+					//console.log(streakcoords[(j * numpointsx) + i]);
+					streakcoords[(j * numpointsx) + i][start_time][h - start_time] = path;
+					streakPaths[h][(j * numpointsx) + i] = "L " + curr_pos[0] +", " + curr_pos[1] + "" + streakPaths[h][(j * numpointsx) + i];
+				}
+			}
+		}
+	}
+	//console.log(pathcoords);
+	
+	for (h = 0; h < hours; h ++){
+		for(i = 0; i < numpointsx; i++){
+			for(j = 0; j < numpointsy;j++){
+			streakPaths[h][j * numpointsx + i] = 'M ' + (i * (960/numpointsx)) + ', ' + (j * (600/numpointsy)) + '' + streakPaths[h][j * numpointsx + i];
+			}
+		}
+	}
+	
+	var d3streakcoords = svg.selectAll('forwardstreakcoords')
+		.data(streakcoords).enter().append("g");
+		
+	var streaklinepaths = d3streakcoords.selectAll('forwardPaths')
+		.data(function(d){return d}).enter().append('path')
+		.attr('d', function(d,i){return d[curr_time-i];})
+		.attr("marker-end", "")
+		.attr("stroke", "#000")
+		.attr('stroke-opacity', "0")
+		.attr('fill-opacity', "0")
+		.attr("stroke-width", "3");
+	
+	var streaklines = svg.selectAll('streakPaths')
+		.data(streakPaths[curr_time])
+		.enter().append('g').append('path')
+		.attr('d', function(d,i){return d;})
+		.attr("stroke", "green")
+		.attr('stroke-opacity', "0")
+		.attr('fill-opacity', "0")
+		.attr("stroke-width", "3");
+	
+
+	d3.select("#heat").on("click",switchHeat);
+	d3.select("#markerMode").on("click",switchMarker);
+	
+	
+	var slider = document.getElementById("myRange");//update all elements to match time
+	var output = document.getElementById("demo");
+	output.innerHTML = "" + slider.value + ":00";
+
+	slider.oninput = function(){
+		output.innerHTML = "" + slider.value + ":00";
+		curr_time = this.value;
+		//console.log(curr_time);
+		cells.data(sampleShepard[curr_time]).attr('fill', function(d) {return d3.interpolateRdYlBu(1-( Math.sqrt(Math.pow(d[0],2)+Math.pow(d[1],2))/max_vel));});
+		stations.attr("r", function(d){ return (2+d[curr_time.toString()][1]) * 2;}).attr("fill", function(d) {return d3.interpolateRdYlBu(1-(d[curr_time.toString()][1]/max_vel));});
+		stationarrs
+			.attr('d', function(d,i){return 'M ' + projection([d["Location"][0],d["Location"][1]])[0] + ', ' +
+						projection([d["Location"][0],d["Location"][1]])[1] + 'l ' +
+						((-1)*Math.sin(d[curr_time.toString()][0]*(2*Math.PI/360))*((d[curr_time.toString()][1])*2)) + ', '
+						+ (Math.cos(d[curr_time.toString()][0]*(2*Math.PI/360))*((d[curr_time.toString()][1])* 2)) + '';})//2 + d[3] changes minimum arrow size, but x vs y stays constant
+			.attr("stroke-width", function(d) {return (2+d[curr_time.toString()][1])* (3/5);});
+		gridv.data(minisampleShepard[curr_time]).attr("r", function(d){return (2+Math.sqrt(Math.pow(d[0],2)+Math.pow(d[1],2))) * 2;}).attr("fill", function(d) {return d3.interpolateRdYlBu(1-((Math.sqrt(Math.pow(d[0],2)+Math.pow(d[1],2)))/max_vel));});
+		gridarrs.data(minisampleShepard[curr_time]).attr('d', function(d,i){return 'M ' + (i%numpointsx * (960/numpointsx)) + ', ' + (Math.floor(i/numpointsx) * (600/numpointsy)) + ' l ' + (d[0] * 2)  + ', ' + (d[1] * 2) + '';}).attr("stroke-width", function(d) {return (2+Math.sqrt(Math.pow(d[0],2)+Math.pow(d[1],2)))* (3/5);});
+		streamfwd.data(fwdstreamcoords[curr_time]).attr('d', function(d,i){return d;});
+		streambck.data(bckstreamcoords[curr_time]).attr('d', function(d,i){return d;});
+		streaklinepaths.attr('d', function(d,i){return d[curr_time-i];});
+		streaklines.data(streakPaths[curr_time]).attr('d', function(d,i){return d;});
+		//console.log("done update");
+		
+	}
+	
+	//turn features on/off without recalculating by making them selectively transparent/ non-transparent
+	var HeatOn = 0;
+	function switchHeat(){
+		if( HeatOn === 0){
+		HeatOn = 1;
+		cells.attr("fill-opacity","0.5");
+		}else{
+		HeatOn = 0;
+		cells.attr("fill-opacity","0.0");
+		}
+	}
+	
+	var Mode = 0;
+	function switchMarker(){
+		if(Mode ===0){
+		Mode = 1;
+		stations.attr("fill-opacity","0");
+		stations.attr("stroke-opacity","0");
+		stationarrs.attr("marker-end","");
+		gridv.attr("stroke-opacity","1");
+		gridv.attr("fill-opacity","0.6");
+		gridarrs.attr("marker-end","url(#arrow)");
+		}else if(Mode ===1){
+		Mode = 2;
+		gridv.attr("fill-opacity","0");
+		gridv.attr("stroke-opacity","0");
+		gridarrs.attr("marker-end","");
+		streamfwd.attr("stroke-opacity","0.5");
+		streamfwd.attr("marker-end","url(#arrow)");
+		streambck.attr("stroke-opacity", "0.5");
+		
+		}else if(Mode ===2){
+		Mode = 3;
+		streamfwd.attr("stroke-opacity","0");
+		streamfwd.attr("marker-end","");
+		streambck.attr("stroke-opacity", "0");
+		streaklinepaths.attr("stroke-opacity","0.05");
+		streaklinepaths.attr("marker-end","url(#clearArrow)");
+		streaklines.attr("stroke-opacity","0.5");
+		streaklines.attr("marker-end","");
+		}
+		else if(Mode ===3){
+		Mode = 0;
+		streaklinepaths.attr("stroke-opacity","0");
+		streaklinepaths.attr("marker-end","");
+		streaklines.attr("stroke-opacity","0");
+		streaklines.attr("marker-end","");
+		stations.attr("stroke-opacity","1");
+		stations.attr("fill-opacity","0.6");
+		stationarrs.attr("marker-end","url(#arrow)");
+		}
+	}
+	
+	// used for calculating tiles and transformation
+	function floor(k) {
+	  return Math.pow(2, Math.floor(Math.log(k) / Math.LN2));
+	}
+})
+</script>
